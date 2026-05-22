@@ -27,3 +27,8 @@ static func get_all_nodes_in_childrens_recursive(node:Node)->Array[Node]:
 			nodes.append(child)
 			queue.append(child)	
 	return nodes
+#func group_random_color():
+	#for node in get_nodes():
+		#if node:
+			#var random_color = Color(randf(), randf(), randf())
+			#_set_color_surface_to_node(node,random_color)

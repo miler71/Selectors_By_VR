@@ -1,3 +1,104 @@
 [gd_scene format=3 uid="uid://cgquart4ocm32"]
 
+[ext_resource type="PackedScene" uid="uid://bmmfob0bberxp" path="res://addons/vr_selector/scene/cursor.tscn" id="1_7i7aj"]
+
+[sub_resource type="Animation" id="Animation_7i7aj"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 1.6826805)]
+}
+
+[sub_resource type="Animation" id="Animation_21s2u"]
+resource_name = "left_right"
+length = 2.0
+loop_mode = 2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(0, 0, 1.6826805), Vector3(0, 0, -1.6454345)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_wwbsr"]
+_data = {
+&"RESET": SubResource("Animation_7i7aj"),
+&"left_right": SubResource("Animation_21s2u")
+}
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_21s2u"]
+size = Vector3(1, 1, 0.98913574)
+
+[sub_resource type="BoxMesh" id="BoxMesh_7i7aj"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_7i7aj"]
+albedo_color = Color(0.39531446, 0.22585946, 0.3794852, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_21s2u"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_7i7aj"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_7i7aj"]
+
 [node name="DemoSelector" type="Node3D" unique_id=967429758]
+
+[node name="Camera3D" type="Camera3D" parent="." unique_id=1899663306]
+transform = Transform3D(0.07618162, -0.19371703, 0.9780952, -0.055723857, 0.97858554, 0.19815424, -0.9955356, -0.06959895, 0.06375558, 1.6074033, 0.6161925, 0.5623739)
+
+[node name="OmniLight3D" type="OmniLight3D" parent="." unique_id=1027197213]
+
+[node name="cursor" parent="." unique_id=2135950544 instance=ExtResource("1_7i7aj")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1.6826805)
+
+[node name="MeshInstance3D" parent="cursor/size" parent_id_path=PackedInt32Array(2135950544, 264277975) index="0" unique_id=1361800155]
+transform = Transform3D(1, 0, 0, 0, 0.87412775, 0, 0, 0, 1, -0.002307117, 0, 0.0012602806)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="cursor" unique_id=1724008279]
+libraries/ = SubResource("AnimationLibrary_wwbsr")
+autoplay = &"left_right"
+
+[node name="Node3D" type="Node3D" parent="." unique_id=757553661]
+transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 0, 0, -0.49794972)
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Node3D" unique_id=49244616 groups=["small_cube"]]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Node3D/StaticBody3D" unique_id=1831896702]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.0054326057)
+shape = SubResource("BoxShape3D_21s2u")
+
+[node name="cube" type="MeshInstance3D" parent="Node3D/StaticBody3D" unique_id=1242738448]
+mesh = SubResource("BoxMesh_7i7aj")
+surface_material_override/0 = SubResource("StandardMaterial3D_7i7aj")
+
+[node name="Node3D2" type="Node3D" parent="." unique_id=455854351]
+transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 0, 0, -1.1938945)
+
+[node name="Area3D" type="Area3D" parent="Node3D2" unique_id=778437766 groups=["bigcube"]]
+
+[node name="cube2" type="MeshInstance3D" parent="Node3D2/Area3D" unique_id=559285243]
+mesh = SubResource("BoxMesh_21s2u")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Node3D2/Area3D" unique_id=990357838]
+shape = SubResource("BoxShape3D_7i7aj")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=302127017]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.6905991, 0, -2.265843)
+mesh = SubResource("CapsuleMesh_7i7aj")
+
+[connection signal="has_a_node_changed" from="cursor/Listener" to="MeshInstance3D" method="set_visible"]
+
+[editable path="cursor"]

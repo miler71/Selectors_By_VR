@@ -1,6 +1,17 @@
 [gd_scene format=3 uid="uid://bmmfob0bberxp"]
 
+[ext_resource type="Script" uid="uid://cedrnlk52qy2u" path="res://addons/vr_selector/scene/listen_to_area.gd" id="1_76lru"]
+[ext_resource type="Script" uid="uid://qn7rjn88vwe" path="res://addons/vr_selector/scene/demo/group_white_list.gd" id="2_umtao"]
+[ext_resource type="Script" uid="uid://duyseos8ttdxq" path="res://addons/vr_selector/scene/demo/rotate_nodes.gd" id="3_yhlvk"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_u0a7s"]
+transparency = 1
+albedo_color = Color(0.45490196, 0.09019608, 0.62352943, 0.5058824)
+
 [sub_resource type="SphereMesh" id="SphereMesh_u0a7s"]
+material = SubResource("StandardMaterial3D_u0a7s")
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_u0a7s"]
 
 [node name="cursor" type="Node3D" unique_id=2135950544]
 
@@ -8,3 +19,23 @@
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="size" unique_id=1361800155]
 mesh = SubResource("SphereMesh_u0a7s")
+
+[node name="Area3D" type="Area3D" parent="size" unique_id=1639985400]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="size/Area3D" unique_id=823597301]
+shape = SubResource("SphereShape3D_u0a7s")
+
+[node name="Listener" type="Node" parent="." unique_id=1012279239 node_paths=PackedStringArray("observed_area")]
+script = ExtResource("1_76lru")
+observed_area = NodePath("../size/Area3D")
+
+[node name="GroupWhiteList" type="Node" parent="Listener" unique_id=2144800433]
+script = ExtResource("2_umtao")
+allow_group = "small_cube"
+metadata/_custom_type_script = "uid://qn7rjn88vwe"
+
+[node name="RotateNode" type="Node" parent="Listener" unique_id=1704331602]
+script = ExtResource("3_yhlvk")
+
+[connection signal="array_status" from="Listener" to="Listener/GroupWhiteList" method="push_in_nodes"]
+[connection signal="filtered_nodes" from="Listener/GroupWhiteList" to="Listener/RotateNode" method="push_in_nodes"]
